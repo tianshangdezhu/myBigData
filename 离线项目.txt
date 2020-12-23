@@ -1,0 +1,57 @@
+1、数据来源：埋点日志和业务数据库
+2、数据仓库：对数据进行清洗、重组、聚合、分类、拆分等等
+3、数据目的地：报表系统、用户画像、系统推荐
+4、数据采集：Flume、Kafka、Sqoop
+   数据存储：Mysql、Hdfs
+   数据计算：Hive、Tez
+   数据查询：Druid、Presto
+5、数据流程设计
+   埋点日志框架：Flume-->Kafka-->Flume-->Hdfs-->Hive-->Mysql-->数据可视化
+   业务数据：Sqoop-->Hdfs-->Hive-->Mysql-->数据可视化
+6、埋点日志格式，公共字段和业务字段
+	（问的时候说）
+	时间戳|{
+	"ap":"APP",--来源（APP、PC）
+	"cm":{--公共字段
+			"uid":"111",
+	     },
+	"et":[
+			{
+			"ett":"12322",--发生的时间
+			"en":"display",--事件名称
+			"kv":{--事件结果
+				"",""
+				}
+			},{}
+		]
+	
+	}
+7、hadoop
+	HDFS配置多路径
+	LZO压缩
+	进行基准测试，查看HDFS的读写能力
+	参数调优：设置namenode线程池、编辑日志路径和镜像日志路径分离、yarn内存
+	宕机
+		①MR造成的，控制yarn的并行度和每个任务的内存
+		②HDFS造成的，调节kafka存储的大小，控制从kafka获取文件的数量
+8、zookeeper
+	奇数台
+9、Flume
+	source
+		taildir source支持断点续传、多目录
+		exec source实时搜索数据，有可能会丢失数据
+		spooling Directory source监控目录，不支持断点续传
+	channel
+		kafka channel下一层是kafka，没有sink，数据传输更快
+		file channel数据存储在磁盘，数据安全，数据传输慢
+		memory channel 数据存储在内存，会丢数，数据传输快
+	sink
+	使用了拦截器
+		ETL拦截器，过滤日志不完整、时间戳不合法
+		日志类型拦截器，将启动日志和事务日志分离开来
+		
+		
+		
+		
+		
+	
